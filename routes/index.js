@@ -1,5 +1,6 @@
 const performQuery = require('../utils/utils');
 const registrationMiddleWare = require('../middlewares/middlewares');
+const loginMiddleWare = require('../middlewares/middlewares');
 
 const express = require('express');
 const router = express.Router();
@@ -69,6 +70,8 @@ router.delete('/users', async function (req, res) {
     return res.send(`User with id ${userId} has been deleted`);
 })
 
+//registration
+
 router.post('/registration', registrationMiddleWare, async function (req, res) {
     const {name, login, password} = req.body;
 
@@ -83,11 +86,21 @@ router.post('/registration', registrationMiddleWare, async function (req, res) {
     return res.json('User has been successfully added !');
 });
 
+//login
 
+router.post('/login', loginMiddleWare, async function (req, res) {
+
+    const {login, password} = req.body;
+    const successLogin = await performQuery(`SELECT * FROM users WHERE login = '${login}' AND password = '${password}'`, pool);
+
+    if (successLogin.length === 0) {
+        return res.send('Incorrect email or password.');
+    }
+
+    return res.json('Successfully logged!');
+});
 
 
 // Functions
-
-
 
 module.exports = router;

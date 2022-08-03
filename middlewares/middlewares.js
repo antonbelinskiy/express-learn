@@ -16,4 +16,23 @@ function registrationMiddleWare(req, res, next) {
     next();
 }
 
+function loginMiddleWare(req, res, next) {
+    const login = req.body.login,
+        password = req.body.password;
+
+    if (!password && !login) {
+        return res.send('Password and login are required.');
+    }
+    if (!login) {
+        return res.send('Login is required.');
+    }
+    if (!password) {
+        return res.send('Password is required.');
+    }
+
+
+    next();
+}
+
 module.exports = registrationMiddleWare;
+module.exports = loginMiddleWare;
